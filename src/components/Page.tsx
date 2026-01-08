@@ -1,7 +1,6 @@
 import { useRef, useMemo } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { TextureLoader, DoubleSide, Mesh, MeshStandardMaterial } from 'three';
-import * as THREE from 'three';
+import { useLoader } from '@react-three/fiber';
+import { TextureLoader, DoubleSide, Mesh } from 'three';
 
 interface PageProps {
   position: [number, number, number];
@@ -9,7 +8,6 @@ interface PageProps {
   width: number;
   height: number;
   frontTexture: string | null;
-  backTexture: string | null;
   showSpotUV: boolean;
   spotUVIntensity: number;
   showPerforations: boolean;
@@ -28,7 +26,6 @@ export function Page({
   width,
   height,
   frontTexture,
-  backTexture,
   showSpotUV,
   spotUVIntensity,
   showPerforations,
@@ -44,39 +41,6 @@ export function Page({
     undefined,
     () => {} // error handler
   );
-
-  // Create materials
-  const materials = useMemo(() => {
-    const baseMaterial = new MeshStandardMaterial({
-      color: 0xffffff,
-      roughness: showSpotUV ? 0.2 : 0.8,
-      metalness: showSpotUV ? spotUVIntensity * 0.3 : 0,
-      side: DoubleSide,
-    });
-
-    const frontMaterial = new MeshStandardMaterial({
-      map: frontTexture ? frontTex : null,
-      color: frontTexture ? 0xffffff : 0xf5f5f5,
-      roughness: showSpotUV ? 0.1 : 0.6,
-      metalness: showSpotUV ? spotUVIntensity * 0.4 : 0,
-      envMapIntensity: showSpotUV ? 1 + spotUVIntensity : 0.5,
-    });
-
-    const backMaterial = new MeshStandardMaterial({
-      color: 0xf8f8f8,
-      roughness: 0.9,
-      metalness: 0,
-    });
-
-    return [
-      baseMaterial, // right
-      baseMaterial, // left
-      baseMaterial, // top
-      baseMaterial, // bottom
-      frontMaterial, // front
-      backMaterial, // back
-    ];
-  }, [frontTex, frontTexture, showSpotUV, spotUVIntensity]);
 
   // Calculate image area within margins
   const imageWidth = width - imageMargins.left - imageMargins.right;

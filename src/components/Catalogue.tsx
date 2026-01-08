@@ -1,6 +1,6 @@
 import { useMemo, Suspense } from 'react';
 import { useSpring, animated } from '@react-spring/three';
-import { PAGE_IMAGES, ViewMode } from '../types';
+import { PAGE_IMAGES, type ViewMode } from '../types';
 import { Page } from './Page';
 
 interface CatalogueProps {
@@ -120,7 +120,6 @@ export function Catalogue({
       case 'chair': {
         // Chair-like curve arrangement
         const t = index / (TOTAL_PAGES - 1); // 0 to 1
-        const curveAngle = t * Math.PI; // 0 to 180 degrees
         const r = circleRadius * scale * 0.8;
 
         // Chair shape: curved back and seat
@@ -169,13 +168,11 @@ export function Catalogue({
           return (
             <AnimatedPage
               key={page.id}
-              index={index}
               position={transform.position}
               rotation={transform.rotation}
               width={scaledWidth}
               height={scaledHeight}
               frontTexture={page.frontImage}
-              backTexture={null}
               showSpotUV={showSpotUV}
               spotUVIntensity={spotUVIntensity}
               showPerforations={showPerforations}
@@ -197,13 +194,11 @@ export function Catalogue({
 }
 
 interface AnimatedPageProps {
-  index: number;
   position: [number, number, number];
   rotation: [number, number, number];
   width: number;
   height: number;
   frontTexture: string | null;
-  backTexture: string | null;
   showSpotUV: boolean;
   spotUVIntensity: number;
   showPerforations: boolean;
@@ -224,14 +219,12 @@ function AnimatedPage({
   width,
   height,
   frontTexture,
-  backTexture,
   showSpotUV,
   spotUVIntensity,
   showPerforations,
   imageMargins,
   animationSpeed,
   onClick,
-  isCurrentPage,
 }: AnimatedPageProps) {
   const spring = useSpring({
     position,
@@ -245,8 +238,8 @@ function AnimatedPage({
 
   return (
     <animated.group
-      position={spring.position as any}
-      rotation={spring.rotation as any}
+      position={spring.position as unknown as [number, number, number]}
+      rotation={spring.rotation as unknown as [number, number, number]}
     >
       <Page
         position={[0, 0, 0]}
@@ -254,7 +247,6 @@ function AnimatedPage({
         width={width}
         height={height}
         frontTexture={frontTexture}
-        backTexture={backTexture}
         showSpotUV={showSpotUV}
         spotUVIntensity={spotUVIntensity}
         showPerforations={showPerforations}

@@ -1,6 +1,6 @@
 import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import { Catalogue } from './Catalogue';
-import { ViewMode } from '../types';
+import type { ViewMode } from '../types';
 
 interface SceneProps {
   viewMode: ViewMode;

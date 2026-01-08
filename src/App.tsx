@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useControls, folder, button } from 'leva';
 import { Scene } from './components/Scene';
-import { ViewMode, DEFAULT_SETTINGS } from './types';
+import { type ViewMode, DEFAULT_SETTINGS } from './types';
 import './App.css';
 
 function App() {
